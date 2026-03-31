@@ -22,6 +22,7 @@ while true; do
         echo "[SCANNER] Linha processada: '$linha_limpa'"
     fi
 done
+```
 
 ## Atividade 2 – Expressões Regulares online (regexr + regex101)
 
