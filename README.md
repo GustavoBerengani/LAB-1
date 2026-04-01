@@ -1,7 +1,5 @@
 # Relatório - Fase 1 de Compiladores: Análise Léxica / Scanner
 
-# Relatório - Fase 1 de Compiladores: Análise Léxica / Scanner
-
 - **Faculdade:** PUC-SP
 - **Curso:** Ciência da Computação (5º Período)
 - **Disciplina:** Compiladores
