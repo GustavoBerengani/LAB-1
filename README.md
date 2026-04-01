@@ -62,5 +62,36 @@ Nesta etapa, utilizamos o modo Regex do MS VS Code (ativado pelo ícone `.*` na 
    * Depois:
      <img width="1725" height="881" alt="SubstituicaoPosDoisPontosIgual" src="https://github.com/user-attachments/assets/3c55c0a0-155a-4fd6-88b1-97df553db155" />
      
+3. **Limpar espaços extras em um arquivo CSV (mais de 10 mil linhas):**
+   * **Find:** `[ \t]+`
+   * **Replace:** ` ` *(um único espaço)*
+   * *Ação:* Localiza sequências de múltiplos espaços ou tabs e as reduz a um espaço simples, higienizando os dados.
+   * Evidência:
+     <img width="1126" height="935" alt="image" src="https://github.com/user-attachments/assets/19888447-70cf-489a-af5d-f61c06add17b" />
+
+
+4. **Tornar um arquivo CSV em um TSV (Tab-Separated Values):**
+   * **Find:** `,`
+   * **Replace:** `\t`
+   * *Ação:* Troca todas as vírgulas por espaçamentos de tabulação.
+   * Evidência (pós troca):
+     <img width="1107" height="917" alt="image" src="https://github.com/user-attachments/assets/3977c4a5-9316-48be-9825-40a38c4833d6" />
+
+5. **Converter CSV com dados em português para inglês:**
+   *Para evitar que a troca de separadores destrua as casas decimais, o processo foi dividido em duas etapas:*
+   * **Passo A (Casas Decimais):** * **Find:** `(\d),(\d)`
+     * **Replace:** `$1.$2`
+     * Evidência (pós troca):
+       <img width="1127" height="938" alt="image" src="https://github.com/user-attachments/assets/501abb45-73d0-4f70-86ed-5960f6cc3aa9" />
+
+   * **Passo B (Separadores de Coluna):**
+     * **Find:** `,`
+     * **Replace:** `;`
+     * Evidência (pós troca):
+       <img width="1134" height="976" alt="image" src="https://github.com/user-attachments/assets/2f4281db-c71d-4874-8c9f-abe114a2ae93" />
+
+**Conexão com a Teoria:**
+O scanner faz exatamente isso em tempo de compilação. Ele lê o fluxo de caracteres de entrada, identifica padrões estruturais através de expressões regulares (como os comentários e operadores) e os descarta ou substitui pelas categorias de tokens apropriadas antes de enviar a estrutura limpa para o analisador sintático.
+     
 
      
