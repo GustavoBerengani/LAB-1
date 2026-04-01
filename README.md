@@ -92,6 +92,114 @@ Nesta etapa, utilizamos o modo Regex do MS VS Code (ativado pelo ícone `.*` na 
 
 **Conexão com a Teoria:**
 O scanner faz exatamente isso em tempo de compilação. Ele lê o fluxo de caracteres de entrada, identifica padrões estruturais através de expressões regulares (como os comentários e operadores) e os descarta ou substitui pelas categorias de tokens apropriadas antes de enviar a estrutura limpa para o analisador sintático.
-     
+
+## Atividade 4 – RegExp em Python e Java
+
+Nesta atividade, implementamos um mini-scanner utilizando as bibliotecas nativas de expressões regulares em Python e Java. O objetivo foi criar um autômato finito em código que retorna os tokens, simulando a tokenização estruturada do compilador.
+
+### Implementação em Python (Google Colab)
+O laboratório foi desenvolvido em etapas evolutivas dentro do Google Colab (o arquivo `ScannerAtividade04.ipynb` completo está disponível na pasta desta atividade no repositório).
+
+**Passo 1: Automato Finito Básico (`re.findall`)**
+Testamos a extração simples em uma lista de strings.
+
+```python
+import re
+
+codigo = "position = initial + rate * 60"
+regexp = r'[a-zA-Z_][a-zA-Z0-9_]*|\d+|[=+\-*]' # Definindo o Automato Finito
+
+tokens = re.findall(regexp, codigo) # O Automato ganha vida
+print(tokens)
+# Saída: ['position', '=', 'initial', '+', 'rate', '*', '60']
+```
+
+**Passo 2: Extração de E-mails com `requests`**
+Utilizamos a biblioteca `requests` para ler o HTML de uma página web real e aplicamos uma expressão regular para capturar e isolar os endereços de e-mail encontrados.
+
+```python
+import re
+import requests
+
+# Lendo o conteúdo texto de uma página web
+url = "[https://www.pucsp.br/contato](https://www.pucsp.br/contato)"
+resposta = requests.get(url)
+texto_pagina = resposta.text
+
+# Regex para capturar e-mails
+regex_email = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+
+emails_encontrados = re.findall(regex_email, texto_pagina)
+# Removendo duplicatas convertendo para set e voltando para lista
+emails_unicos = list(set(emails_encontrados))
+
+print(f"E-mails encontrados: {emails_unicos}")
+```
+
+**Passo 3: Evolução para a função `tokenize(texto)`**
+Evoluímos o scanner para retornar uma lista estruturada de tuplas `(tipo, lexema)`, utilizando grupos nomeados na Regex.
+
+```python
+import re
+
+def tokenize(texto):
+    # Gramática regular com grupos nomeados para classificar o token
+    regexp = r'(?P<ID>[a-zA-Z_][a-zA-Z0-9_]*)|(?P<NUM>\d+)|(?P<OP>[=+\-*])|(?P<SKIP>\s+)'
+    
+    tokens = []
+    for match in re.finditer(regexp, texto):
+        tipo = match.lastgroup
+        lexema = match.group()
+        
+        if tipo != 'SKIP': # Ignora espaços em branco
+            tokens.append((tipo, lexema))
+            
+    return tokens
+
+codigo = "position = initial + rate * 60"
+print(tokenize(codigo))
+# Saída: [('ID', 'position'), ('OP', '='), ('ID', 'initial'), ('OP', '+'), ('ID', 'rate'), ('OP', '*'), ('NUM', '60')]
+```
+
+---
+
+### Implementação em Java (`ScannerApp.java`)
+A mesma lógica estruturada do tokenizer foi aplicada em Java utilizando as classes `Pattern` e `Matcher`. Os grupos nomeados em Java usam a sintaxe `(?<nome>)` e as barras invertidas precisam ser escapadas nas strings (`\\`). O código-fonte também se encontra na pasta da atividade.
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class ScannerApp {
+    public static void main(String[] args) {
+        String codigo = "position = initial + rate * 60";
+        // Gramática regular com grupos nomeados em Java
+        String regex = "(?<ID>[a-zA-Z_][a-zA-Z0-9_]*)|(?<NUM>\\d+)|(?<OP>[=+\\-*])|(?<SKIP>\\s+)";
+        
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(codigo);
+        
+        List<String> tokens = new ArrayList<>();
+        
+        // Loop de varredura do scanner
+        while (matcher.find()) {
+            if (matcher.group("SKIP") != null) continue; // Ignora os espaços em branco
+            
+            // Classifica e adiciona à lista no formato de tupla (String)
+            if (matcher.group("ID") != null) {
+                tokens.add("('ID', '" + matcher.group("ID") + "')");
+            } else if (matcher.group("NUM") != null) {
+                tokens.add("('NUM', '" + matcher.group("NUM") + "')");
+            } else if (matcher.group("OP") != null) {
+                tokens.add("('OP', '" + matcher.group("OP") + "')");
+            }
+        }
+        
+        System.out.println(tokens);
+    }
+}
+```
 
      
