@@ -45,9 +45,10 @@ Nesta etapa, utilizamos o modo Regex do MS VS Code (ativado pelo ícone `.*` na 
    * **Find:** `\/\/.*|\/\*[\s\S]*?\*\/`
    * **Replace:** *(deixar em branco)*
    * *Ação:* Remove tanto os comentários de linha única quanto os blocos de múltiplas linhas.
-   * Antes:*
+   * Antes: 
     <img width="1736" height="965" alt="ReplaceComentáriosEmC" src="https://github.com/user-attachments/assets/4d6a1831-3e8c-45fc-8e36-6d8bf38f151a" />
-    * Depois:*
+    
+    * Depois:
     <img width="1739" height="917" alt="AposRemoveCometáriosEmC" src="https://github.com/user-attachments/assets/2aaa1d8a-0f6c-46f3-866d-ec04e373a7f5" />
 
 2. **Substituir `=` por `:=` (simulando mudança de linguagem):**
@@ -55,11 +56,9 @@ Nesta etapa, utilizamos o modo Regex do MS VS Code (ativado pelo ícone `.*` na 
    * **Replace:** `:=`
    * *Ação:* Usa *lookarounds* para garantir que apenas o operador de atribuição `=` seja alterado, ignorando operadores relacionais como `==`, `>=`, `<=`, ou `!=`.
    * Antes:
-   
      <img width="1721" height="948" alt="SubstituicaoPreIgual" src="https://github.com/user-attachments/assets/04351fce-ee0c-45ee-a473-64edad342a80" />
      
    * Depois:
-     
      <img width="1725" height="881" alt="SubstituicaoPosDoisPontosIgual" src="https://github.com/user-attachments/assets/3c55c0a0-155a-4fd6-88b1-97df553db155" />
      
 
