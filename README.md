@@ -4,6 +4,8 @@
 **Curso:** Ciência da Computação (5º Período)
 **Disciplina:** Compiladores
 **Equipe:** Gustavo Negrão, William da Silva Marques
+
+**Nota:** relatório completo do LAB-1 está neste README.md, entretanto, no repositório estão divididas pastas para cada atividade contendo os arquivos que foram utilizados em cada uma delas. 
 ---
 
 ## Atividade 1 – Bash no Terminal Ubuntu
