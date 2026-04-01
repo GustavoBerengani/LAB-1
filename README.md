@@ -248,6 +248,19 @@ Um modelo simples que ramifica do estado inicial para reconhecer de forma direta
 ![Autômato - Operadores](Atividade05/automato_op.png)
 *(Insira aqui o print do seu autômato de Operadores)*
 
+### 4. Autômato Léxico Unificado (Scanner Completo)
+Para simular o comportamento real da ferramenta, unificamos os modelos anteriores em um único Autômato Finito Não Determinístico (AFND). A partir de um estado inicial global, utilizamos transições Epsilon (`λ`) para ramificar a leitura, permitindo que o modelo reconheça qualquer um dos padrões válidos da nossa gramática léxica.
+
+**Por que não há um autômato para a string inteira?**
+É importante ressaltar que o Analisador Léxico não valida a semântica ou a ordem da frase completa (ex: `position = initial + rate * 60`). Sua função é puramente classificar lexemas individuais. A validação estrutural (`ID = ID + ID * NUM`) é responsabilidade exclusiva da próxima etapa do compilador (Análise Sintática).
+
+**Simulação da string do livro (Multiple Run no JFLAP):**
+Para testar a string proposta pelo roteiro, submetemos os lexemas isolados ao Autômato Unificado utilizando o recurso *Multiple Run*. Como esperado, a máquina de estados atingiu a condição de *Accept* para todos os tokens válidos e ignorou os espaços.
+
+**Evidência do Autômato Unificado e Teste:**
+![Autômato - Unificado](Atividade05/automato_unificado.png)
+*(Insira aqui o print do seu autômato unificado ou da tela de Multiple Run do JFLAP dando Accept nos tokens)*
+
 **Conclusão da Etapa:**
 A modelagem no JFLAP fecha o ciclo lógico da Fase 1 de um compilador. Provamos que é possível traduzir um fluxo de caracteres (Atividade 1), classificá-lo por padrões de gramática regular (Atividades 2, 3 e 4) e modelar matematicamente as regras de transição de estado que o processador executará em baixo nível (Atividade 5).
 
