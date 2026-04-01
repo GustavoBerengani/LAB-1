@@ -162,11 +162,11 @@ print(tokenize(codigo))
 ```
 
 ### Implementação em Java (`ScannerApp.java`)
-A mesma lógica estruturada do tokenizer foi aplicada em Java utilizando as classes `Pattern` e `Matcher`. Os grupos nomeados em Java usam a sintaxe `(?<nome>)` e as barras invertidas precisam ser escapadas nas strings (`\\`). O código-fonte também se encontra na pasta da atividade.
+A mesma lógica estruturada do tokenizer foi aplicada em Java utilizando as classes `Pattern` e `Matcher` com a sintaxe de grupos nomeados `(?<nome>)`. Para cumprir o "Desafio Final" do laboratório, o código foi aprimorado para simular perfeitamente a saída do Analisador Léxico ilustrada na Figura 1.7 do "Livro do Dragão". Para isso, implementamos uma Tabela de Símbolos utilizando a estrutura `LinkedHashMap`, responsável por registrar novos identificadores e atribuir a eles um índice na memória. A saída gerada (`<id, 1><=><id, 2><+><id, 3><*><60>`) espelha com exatidão o comportamento de um compilador real na etapa de escaneamento. O código-fonte também se encontra na pasta da atividade.
 
 ```java
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -179,23 +179,42 @@ public class ScannerApp {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(codigo);
         
-        List<String> tokens = new ArrayList<>();
+        // Tabela de Símbolos simulada para guardar os IDs e seus índices
+        Map<String, Integer> tabelaSimbolos = new LinkedHashMap<>();
+        int idCounter = 1;
+        
+        StringBuilder saidaDragonBook = new StringBuilder();
         
         // Loop de varredura do scanner
         while (matcher.find()) {
-            if (matcher.group("SKIP") != null) continue; // Ignora os espaços em branco
+            if (matcher.group("SKIP") != null) continue; // Ignora espaços em branco
             
-            // Classifica e adiciona à lista no formato de tupla (String)
             if (matcher.group("ID") != null) {
-                tokens.add("('ID', '" + matcher.group("ID") + "')");
-            } else if (matcher.group("NUM") != null) {
-                tokens.add("('NUM', '" + matcher.group("NUM") + "')");
-            } else if (matcher.group("OP") != null) {
-                tokens.add("('OP', '" + matcher.group("OP") + "')");
+                String lexema = matcher.group("ID");
+                // Se o ID ainda não está na tabela de símbolos, registra com um novo número
+                if (!tabelaSimbolos.containsKey(lexema)) {
+                    tabelaSimbolos.put(lexema, idCounter++);
+                }
+                // Imprime no formato <id, índice> SEM espaço no final
+                saidaDragonBook.append("<id, ").append(tabelaSimbolos.get(lexema)).append(">");
+            } 
+            else if (matcher.group("NUM") != null) {
+                // Números são impressos diretamente entre <> SEM espaço no final
+                saidaDragonBook.append("<").append(matcher.group("NUM")).append(">");
+            } 
+            else if (matcher.group("OP") != null) {
+                // Operadores são impressos diretamente entre <> SEM espaço no final
+                saidaDragonBook.append("<").append(matcher.group("OP")).append(">");
             }
         }
         
-        System.out.println(tokens);
+        System.out.println("Saída exata (Figura 1.7 do Dragon Book):");
+        System.out.println(saidaDragonBook.toString());
+        
+        System.out.println("\nEstado final da Tabela de Símbolos:");
+        for (Map.Entry<String, Integer> entry : tabelaSimbolos.entrySet()) {
+            System.out.println("Índice " + entry.getValue() + " -> " + entry.getKey());
+        }
     }
 }
 ```
