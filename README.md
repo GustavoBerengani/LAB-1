@@ -254,4 +254,29 @@ Um reconhecedor de transição direta para os símbolos reservados da linguagem.
 Para validar a string completa do "Livro do Dragão" (*position = initial + rate * 60*), realizamos testes individuais de cada lexema em seus respectivos autômatos através da função **Input > Step with Closure** do JFLAP. 
 
 Essa separação prova que o scanner é capaz de decompor a sentença complexa em unidades atômicas (tokens) e classificá-las corretamente antes de qualquer análise sintática, cumprindo o objetivo principal desta fase do compilador.
-     
+
+## Atividade 6 – OpenAI Tokenizer × Tokens de Compilador
+
+Nesta atividade, comparamos a abordagem clássica de Análise Léxica com a tokenização estatística utilizada por Grandes Modelos de Linguagem (LLMs), utilizando a ferramenta [OpenAI Tokenizer](https://platform.openai.com/tokenizer).
+
+### 1. Por que o tokenizer da OpenAI quebra `position` em `pos` + `ition`?
+
+**Observação da Equipe:** Durante os testes, notamos que nos modelos mais recentes (família GPT-4o e o1), a palavra `position` já é mapeada como um token único. A quebra em `pos` + `ition` mencionada no roteiro ocorre ao rodar o texto nos modelos legados (GPT-3). 
+
+<img width="846" height="598" alt="image" src="https://github.com/user-attachments/assets/d55adfd4-e469-4a4d-80c1-3802bdcac9ba" />
+
+**Explicação do fenômeno:** Diferente de um compilador clássico, o tokenizer da OpenAI não conhece as regras da linguagem C ou Java. Ele utiliza um algoritmo de compressão de dados chamado **BPE (Byte Pair Encoding)**. O BPE constrói seus tokens baseando-se puramente na **frequência estatística** com que conjuntos de caracteres aparecem no seu banco de dados de treinamento. 
+
+Nos modelos antigos, o algoritmo percebeu que o prefixo `pos` e o sufixo `ition` apareciam frequentemente em milhares de palavras diferentes, então ele otimizava o dicionário quebrando a palavra ao meio. Ele não se importa se `position` é uma variável válida no código; ele foca na forma mais eficiente de compactar o texto. Modelos mais novos possuem vocabulários muito maiores, o que permite armazenar a palavra inteira como um único token.
+
+### 2. Diferença conceitual: Token Léxico vs. Token de LLM (BPE)
+
+* **Token Léxico (Compiladores):** É **baseado em regras (Determinístico)**. Segue rigorosamente a gramática regular da linguagem. Cada token tem um significado estrutural para o compilador (ex: "Identificador", "Operador"). Se o texto violar a regra do Autômato Finito, gera erro.
+* **Token de LLM (BPE):** É **baseado em dados (Estatístico/Probabilístico)**. Representa fragmentos de texto (sub-palavras ou letras) estatisticamente comuns na internet. Não possui categoria estrutural ou semântica para a etapa de tokenização; é apenas um fragmento mapeado para um número (ID) para que a Rede Neural processe probabilidades.
+
+### 3. Discussão Final: A Necessidade de Precisão
+**"Por que o scanner de compilador precisa ser preciso e seguir a gramática, enquanto o da OpenAI não?"**
+
+Essa diferença reflete o **objetivo final** de cada sistema:
+* **Compiladores exigem rigor absoluto:** O código-fonte será traduzido para instruções de máquina exatas. Não existe margem para ambiguidade; um caractere fora da regra quebra a lógica do software. O scanner é o primeiro validador, barrando tudo que não pertencer à gramática.
+* **LLMs lidam com Linguagem Natural:** A comunicação humana (e *prompts*) é flexível, ambígua e sujeita a erros ortográficos ou neologismos. Se a OpenAI usasse um scanner rígido de compilador, a IA não conseguiria interpretar palavras não catalogadas. A tokenização por sub-palavras (BPE) confere flexibilidade ao modelo, permitindo que ele "deduza" partes de palavras desconhecidas sem gerar um erro fatal.
