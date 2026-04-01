@@ -161,8 +161,6 @@ print(tokenize(codigo))
 # Saída: [('ID', 'position'), ('OP', '='), ('ID', 'initial'), ('OP', '+'), ('ID', 'rate'), ('OP', '*'), ('NUM', '60')]
 ```
 
----
-
 ### Implementação em Java (`ScannerApp.java`)
 A mesma lógica estruturada do tokenizer foi aplicada em Java utilizando as classes `Pattern` e `Matcher`. Os grupos nomeados em Java usam a sintaxe `(?<nome>)` e as barras invertidas precisam ser escapadas nas strings (`\\`). O código-fonte também se encontra na pasta da atividade.
 
