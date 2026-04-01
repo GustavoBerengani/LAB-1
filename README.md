@@ -219,4 +219,36 @@ public class ScannerApp {
 }
 ```
 
+## Atividade 5 – Autômatos Finitos no JFLAP
+
+Para consolidar a teoria por trás da Análise Léxica, utilizamos o software **JFLAP** para modelar visualmente os Autômatos Finitos que reconhecem os tokens da nossa linguagem de exemplo. 
+
+As expressões regulares criadas nas atividades anteriores são convertidas internamente pelos geradores de analisadores léxicos em Autômatos Finitos Não Determinísticos (AFND) e, posteriormente, em Autômatos Finitos Determinísticos (AFD) para otimizar a varredura do texto.
+
+Abaixo estão as representações visuais das máquinas de estado desenvolvidas. Os arquivos fonte originais (`.jff`) estão disponíveis na pasta `Atividade05` do repositório para execução e simulação no próprio JFLAP.
+
+### 1. Autômato para Identificadores (ID) e Palavras-chave
+Este autômato demonstra o reconhecimento do padrão `[a-zA-Z_][a-zA-Z0-9_]*`. O estado inicial transita para o estado de aceitação ao ler uma letra ou *underscore*, e permanece no estado de aceitação em um *loop* contínuo enquanto lê letras, números ou *underscores*.
+
+**Evidência:**
+![Autômato - Identificadores](Atividade05/automato_id.png)
+*(Insira aqui o print do seu autômato de IDs)*
+
+### 2. Autômato para Números (NUM)
+Este autômato reconhece dígitos contínuos usando a base da regex `\d+`. A transição exige pelo menos um dígito (0-9) para chegar ao estado final de aceitação, onde pode continuar lendo mais dígitos através de uma transição cíclica.
+
+**Evidência:**
+![Autômato - Números](Atividade05/automato_num.png)
+*(Insira aqui o print do seu autômato de Números)*
+
+### 3. Autômato para Operadores (OP) e Atribuição
+Um modelo simples que ramifica do estado inicial para reconhecer de forma direta os caracteres de operação (`+`, `-`, `*`) e o sinal de atribuição (`=`).
+
+**Evidência:**
+![Autômato - Operadores](Atividade05/automato_op.png)
+*(Insira aqui o print do seu autômato de Operadores)*
+
+**Conclusão da Etapa:**
+A modelagem no JFLAP fecha o ciclo lógico da Fase 1 de um compilador. Provamos que é possível traduzir um fluxo de caracteres (Atividade 1), classificá-lo por padrões de gramática regular (Atividades 2, 3 e 4) e modelar matematicamente as regras de transição de estado que o processador executará em baixo nível (Atividade 5).
+
      
