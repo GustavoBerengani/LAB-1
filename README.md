@@ -219,49 +219,39 @@ public class ScannerApp {
 }
 ```
 
-## Atividade 5 – Autômatos Finitos no JFLAP
+## Atividade 5 – Modelagem de Autômatos Finitos (JFLAP)
 
-Para consolidar a teoria por trás da Análise Léxica, utilizamos o software **JFLAP** para modelar visualmente os Autômatos Finitos que reconhecem os tokens da nossa linguagem de exemplo. 
+Nesta etapa final, utilizamos o software **JFLAP** para construir os modelos matemáticos (Autômatos Finitos) que dão suporte lógico ao nosso scanner. Em vez de uma máquina única e complexa, optamos por modelar os três pilares fundamentais da nossa gramática léxica de forma isolada, garantindo a especialização de cada reconhecedor.
 
-As expressões regulares criadas nas atividades anteriores são convertidas internamente pelos geradores de analisadores léxicos em Autômatos Finitos Não Determinísticos (AFND) e, posteriormente, em Autômatos Finitos Determinísticos (AFD) para otimizar a varredura do texto.
+Os arquivos fonte (`.jff`) de cada autômato estão disponíveis na pasta `Atividade05`.
 
-Abaixo estão as representações visuais das máquinas de estado desenvolvidas. Os arquivos fonte originais (`.jff`) estão disponíveis na pasta `Atividade05` do repositório para execução e simulação no próprio JFLAP.
-
-### 1. Autômato para Identificadores (ID) e Palavras-chave
-Este autômato demonstra o reconhecimento do padrão `[a-zA-Z_][a-zA-Z0-9_]*`. O estado inicial transita para o estado de aceitação ao ler uma letra ou *underscore*, e permanece no estado de aceitação em um *loop* contínuo enquanto lê letras, números ou *underscores*.
+### 1. Autômato para Identificadores (ID)
+Responsável por reconhecer nomes de variáveis e funções seguindo o padrão `[a-zA-Z_][a-zA-Z0-9_]*`. 
+* **Lógica:** Inicia obrigatoriamente com uma letra ou underscore (transição de `q0` para `q1`) e aceita qualquer combinação subsequente de alfanuméricos em um laço de repetição no estado final.
+* **Tokens validados do exemplo:** `position`, `initial`, `rate`.
 
 **Evidência:**
-![Autômato - Identificadores](Atividade05/automato_id.png)
-*(Insira aqui o print do seu autômato de IDs)*
+<img width="1455" height="961" alt="image" src="https://github.com/user-attachments/assets/1c4c3988-b327-493e-9323-905a8b897bae" />
 
 ### 2. Autômato para Números (NUM)
-Este autômato reconhece dígitos contínuos usando a base da regex `\d+`. A transição exige pelo menos um dígito (0-9) para chegar ao estado final de aceitação, onde pode continuar lendo mais dígitos através de uma transição cíclica.
+Focado no reconhecimento de constantes numéricas inteiras (`\d+`).
+* **Lógica:** Requer ao menos um dígito para atingir o estado de aceitação, permitindo a leitura de múltiplos dígitos adicionais.
+* **Token validado do exemplo:** `60`.
 
 **Evidência:**
-![Autômato - Números](Atividade05/automato_num.png)
-*(Insira aqui o print do seu autômato de Números)*
+<img width="1457" height="923" alt="image" src="https://github.com/user-attachments/assets/7d3a6aa2-7961-492d-822a-5ad12590e492" />
 
-### 3. Autômato para Operadores (OP) e Atribuição
-Um modelo simples que ramifica do estado inicial para reconhecer de forma direta os caracteres de operação (`+`, `-`, `*`) e o sinal de atribuição (`=`).
+### 3. Autômato para Operadores e Atribuição (OP)
+Um reconhecedor de transição direta para os símbolos reservados da linguagem.
+* **Lógica:** Ramificações simples que levam a estados de aceitação imediatos ao ler os caracteres mapeados.
+* **Tokens validados do exemplo:** `=`, `+`, `*`.
 
 **Evidência:**
-![Autômato - Operadores](Atividade05/automato_op.png)
-*(Insira aqui o print do seu autômato de Operadores)*
+<img width="1910" height="977" alt="image" src="https://github.com/user-attachments/assets/6b5743f8-3029-4507-a24c-923927902712" />
 
-### 4. Autômato Léxico Unificado (Scanner Completo)
-Para simular o comportamento real da ferramenta, unificamos os modelos anteriores em um único Autômato Finito Não Determinístico (AFND). A partir de um estado inicial global, utilizamos transições Epsilon (`λ`) para ramificar a leitura, permitindo que o modelo reconheça qualquer um dos padrões válidos da nossa gramática léxica.
 
-**Por que não há um autômato para a string inteira?**
-É importante ressaltar que o Analisador Léxico não valida a semântica ou a ordem da frase completa (ex: `position = initial + rate * 60`). Sua função é puramente classificar lexemas individuais. A validação estrutural (`ID = ID + ID * NUM`) é responsabilidade exclusiva da próxima etapa do compilador (Análise Sintática).
+### Metodologia de Teste
+Para validar a string completa do "Livro do Dragão" (*position = initial + rate * 60*), realizamos testes individuais de cada lexema em seus respectivos autômatos através da função **Input > Step with Closure** do JFLAP. 
 
-**Simulação da string do livro (Multiple Run no JFLAP):**
-Para testar a string proposta pelo roteiro, submetemos os lexemas isolados ao Autômato Unificado utilizando o recurso *Multiple Run*. Como esperado, a máquina de estados atingiu a condição de *Accept* para todos os tokens válidos e ignorou os espaços.
-
-**Evidência do Autômato Unificado e Teste:**
-![Autômato - Unificado](Atividade05/automato_unificado.png)
-*(Insira aqui o print do seu autômato unificado ou da tela de Multiple Run do JFLAP dando Accept nos tokens)*
-
-**Conclusão da Etapa:**
-A modelagem no JFLAP fecha o ciclo lógico da Fase 1 de um compilador. Provamos que é possível traduzir um fluxo de caracteres (Atividade 1), classificá-lo por padrões de gramática regular (Atividades 2, 3 e 4) e modelar matematicamente as regras de transição de estado que o processador executará em baixo nível (Atividade 5).
-
+Essa separação prova que o scanner é capaz de decompor a sentença complexa em unidades atômicas (tokens) e classificá-las corretamente antes de qualquer análise sintática, cumprindo o objetivo principal desta fase do compilador.
      
