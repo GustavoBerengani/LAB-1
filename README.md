@@ -54,9 +54,13 @@ Nesta etapa, utilizamos o modo Regex do MS VS Code (ativado pelo ícone `.*` na 
    * **Find:** `(?<![<>=!])=(?![=])`
    * **Replace:** `:=`
    * *Ação:* Usa *lookarounds* para garantir que apenas o operador de atribuição `=` seja alterado, ignorando operadores relacionais como `==`, `>=`, `<=`, ou `!=`.
-   * Antes:*
+   * Antes:
+   
      <img width="1721" height="948" alt="SubstituicaoPreIgual" src="https://github.com/user-attachments/assets/04351fce-ee0c-45ee-a473-64edad342a80" />
-   * Depois:*
+     
+   * Depois:
+     
      <img width="1725" height="881" alt="SubstituicaoPosDoisPontosIgual" src="https://github.com/user-attachments/assets/3c55c0a0-155a-4fd6-88b1-97df553db155" />
+     
 
      
