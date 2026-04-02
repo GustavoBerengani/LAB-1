@@ -305,24 +305,20 @@ O script Python utiliza a biblioteca `re` com suporte nativo a Unicode. O uso do
 import re
 
 def tokenize(file_path):
-    """
-    Realiza a leitura de um arquivo UTF-8 e quebra o texto em tokens
-    utilizando expressões regulares.
-    """
-    # O encoding 'utf-8-sig' remove o caractere invisível BOM se presente
     with open(file_path, 'r', encoding='utf-8-sig') as file:
         texto = file.read()
     
-    # Regex: Palavras com hífen OU qualquer caractere de pontuação
+    # Expressão regular:
+    # \w+(?:-\w+)* -> Captura palavras e palavras compostas por hífen
+    # [^\w\s]      -> Captura qualquer caractere que não seja letra/número ou espaço (pontuação)
     padrao = r"\w+(?:-\w+)*|[^\w\s]"
     
     tokens = re.findall(padrao, texto)
     return tokens
 
-# Execução e validação
+# Exemplo de uso
 lista_tokens = tokenize('a_pata_da_gazella.txt')
-print("Saída (primeiros 20 tokens):")
-print(lista_tokens[:20]) 
+print(lista_tokens[:20]) # Exibe os primeiros 20 tokens
 ```
 
 ---
