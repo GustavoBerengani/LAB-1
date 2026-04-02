@@ -280,3 +280,112 @@ Nos modelos antigos, o algoritmo percebeu que o prefixo `pos` e o sufixo `ition`
 Essa diferença reflete o **objetivo final** de cada sistema:
 * **Compiladores exigem rigor absoluto:** O código-fonte será traduzido para instruções de máquina exatas. Não existe margem para ambiguidade; um caractere fora da regra quebra a lógica do software. O scanner é o primeiro validador, barrando tudo que não pertencer à gramática.
 * **LLMs lidam com Linguagem Natural:** A comunicação humana (e *prompts*) é flexível, ambígua e sujeita a erros ortográficos ou neologismos. Se a OpenAI usasse um scanner rígido de compilador, a IA não conseguiria interpretar palavras não catalogadas. A tokenização por sub-palavras (BPE) confere flexibilidade ao modelo, permitindo que ele "deduza" partes de palavras desconhecidas sem gerar um erro fatal.
+
+## Atividade 7 – Tokenizador de Linguagem Natural (Português)
+
+Nesta atividade, expandimos o conceito de Análise Léxica para o Processamento de Linguagem Natural (PLN). O objetivo foi criar um scanner capaz de ler uma obra literária inteira e separar o texto em um vetor de tokens (palavras e pontuações isoladas), respeitando as particularidades da gramática da língua portuguesa.
+
+A obra escolhida no Project Gutenberg foi **A Pata da Gazela**, de José de Alencar, salva localmente como o arquivo `a_pata_da_gazella.txt`.
+
+### Expressão Regular Utilizada
+Para capturar adequadamente o texto, desenvolvemos a seguinte regex otimizada:
+`\w+(?:-\w+)*|[^\w\s]`
+
+**Explicação da regra:**
+1.  **`\w+(?:-\w+)*`**: Captura caracteres de palavra (letras e números). O grupo não-capturador permite que hífens seguidos de mais letras sejam mantidos no mesmo token, garantindo a integridade de palavras compostas ou com ênclise (ex: "sentou-se", "vê-lo", "guarda-chuva").
+2.  **`|`**: Operador lógico OU.
+3.  **`[^\w\s]`**: Captura qualquer caractere que NÃO seja uma palavra (`\w`) e NÃO seja um espaço em branco (`\s`). Isso isola efetivamente os sinais de pontuação (vírgulas, pontos, exclamações) como tokens individuais.
+
+---
+
+### Implementação em Python (`scanner.py`)
+O script Python utiliza a biblioteca `re` com suporte nativo a Unicode. O uso do encoding `utf-8-sig` é fundamental para ignorar automaticamente o caractere BOM (Byte Order Mark) comum em arquivos do Project Gutenberg.
+
+```python
+import re
+
+def tokenize(file_path):
+    """
+    Realiza a leitura de um arquivo UTF-8 e quebra o texto em tokens
+    utilizando expressões regulares.
+    """
+    # O encoding 'utf-8-sig' remove o caractere invisível BOM se presente
+    with open(file_path, 'r', encoding='utf-8-sig') as file:
+        texto = file.read()
+    
+    # Regex: Palavras com hífen OU qualquer caractere de pontuação
+    padrao = r"\w+(?:-\w+)*|[^\w\s]"
+    
+    tokens = re.findall(padrao, texto)
+    return tokens
+
+# Execução e validação
+lista_tokens = tokenize('a_pata_da_gazella.txt')
+print("Saída (primeiros 20 tokens):")
+print(lista_tokens[:20]) 
+```
+
+---
+
+### Implementação em Java (`ScannerLivro.java`)
+A versão em Java foi implementada para espelhar o comportamento do Python. Um detalhe técnico importante foi o uso da flag `Pattern.UNICODE_CHARACTER_CLASS`, sem a qual o Java não reconheceria caracteres acentuados (como 'ç' ou 'ã') dentro da classe `\w`, causando a quebra indevida de palavras em português.
+
+```java
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+/**
+ * Atividade 7 - Analisador Léxico (Scanner) para Linguagem Natural
+ */
+public class ScannerLivro {
+
+    public static void main(String[] args) {
+        String nomeArquivo = "a_pata_da_gazella.txt";
+
+        try {
+            List<String> tokens = tokenize(nomeArquivo);
+
+            // Exibe os primeiros 20 tokens para validar o resultado
+            System.out.println("Saída (vetor de strings):");
+            System.out.println(tokens.subList(0, Math.min(tokens.size(), 20)));
+
+            System.out.println("\nTotal de tokens processados: " + tokens.size());
+
+        } catch (IOException e) {
+            System.err.println("Erro: Verifique se o arquivo '" + nomeArquivo + "' está na pasta do projeto.");
+        }
+    }
+
+    /**
+     * Realiza a quebra do texto em tokens conforme a gramática
+     */
+    public static List<String> tokenize(String filePath) throws IOException {
+        // Lê o conteúdo do arquivo em UTF-8
+        String texto = Files.readString(Paths.get(filePath), StandardCharsets.UTF_8);
+
+        // Remove o caractere invisível BOM (\ufeff) se existir no início do arquivo
+        if (texto.startsWith("\uFEFF")) {
+            texto = texto.substring(1);
+        }
+
+        List<String> tokens = new ArrayList<>();
+        String padraoRegex = "\\w+(?:-\\w+)*|[^\\w\\s]";
+
+        // Pattern.UNICODE_CHARACTER_CLASS é essencial para tratar acentuação no Java
+        Pattern pattern = Pattern.compile(padraoRegex, Pattern.UNICODE_CHARACTER_CLASS);
+        Matcher matcher = pattern.matcher(texto);
+
+        while (matcher.find()) {
+            tokens.add(matcher.group());
+        }
+
+        return tokens;
+    }
+}
+```
