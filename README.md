@@ -394,6 +394,12 @@ public class ScannerLivro {
     }
 }
 ```
+### Relatos Individuais: (Um parágrafo de cada aluno: “O que há de interessante no analisador léxico (scanner), automato finito, gramática regular”)
+
+**Gustavo Negrão:** "O que mais me chamou a atenção no analisador léxico é o seu papel como 'porteiro' do compilador. É fascinante observar como a teoria das gramáticas regulares se traduz em algo tão prático: um autômato finito que não precisa de memória complexa para decidir, caractere por caractere, o que é um identificador ou um número. Ver a elegância matemática de um AFD (Autômato Finito Determinístico) transformando um código-fonte caótico em uma sequência organizada de tokens é, para mim, o ponto alto da disciplina até agora, pois mostra que a base da computação é construída sobre regras simples, porém infalíveis."
+
+**William da Silva Marques:** "Achei impressionante a versatilidade das expressões regulares quando aplicadas ao scanner. O fato de podermos descrever padrões complexos de uma linguagem inteira através de gramáticas regulares, e depois ver isso funcionando na prática tanto em Java quanto em Python, abre a mente para como o processamento de dados em larga escala funciona. Além disso, entender que o autômato finito é o 'motor' por trás dessa busca por padrões me fez perceber que, mesmo em tecnologias modernas como os tokenizers de IA, o conceito de transformar texto bruto em unidades lógicas de significado permanece o pilar fundamental de qualquer processamento de linguagem."
+
 ### 📝 Agradecimentos
 
 Gostaríamos de agradecer pela orientação e suporte durante o desenvolvimento deste **Laboratório de Compiladores**. O aprendizado sobre a **Fase 1 (Análise Léxica)** foi fundamental para nossa formação em Ciência da Computação.
