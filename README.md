@@ -394,6 +394,6 @@ public class ScannerLivro {
     }
 }
 ```
----
+### 📝 Agradecimentos
 
-##Obrigado!
+Gostaríamos de agradecer pela orientação e suporte durante o desenvolvimento deste **Laboratório de Compiladores**. O aprendizado sobre a **Fase 1 (Análise Léxica)** foi fundamental para nossa formação em Ciência da Computação.
